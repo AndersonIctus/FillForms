@@ -1,13 +1,12 @@
 package com.imigrar.fillforms;
 
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
-
-@SpringBootApplication
 public class FillFormsApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(FillFormsApplication.class, args);
+	public static void main(String... args) {
+		System.out.println("#######################################################");
+		System.out.println("############## PROCESSANDO FORMULÁRIO ##############");
+		System.out.println("** Processando o Arquivo => " + args[0]);
+
 	}
 
 }
