@@ -16,6 +16,8 @@ public class PDFReader {
         try(PDDocument document = PDDocument.load(file)){
             if(document.isEncrypted()){
                 System.out.println("Documento Encriptado!!!");
+                document.setEncryptionDictionary(null);
+                document.setAllSecurityToBeRemoved(true);
             }
 
             PDFTextStripper text = new PDFTextStripper();

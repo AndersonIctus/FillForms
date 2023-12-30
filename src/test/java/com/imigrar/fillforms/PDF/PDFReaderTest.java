@@ -9,8 +9,8 @@ class PDFReaderTest {
 
     @Test
     void readFile() throws IOException {
-//        String filename = "testFileReader.pdf";
-        String filename = "imm1295e.pdf";
+        String filename = "testFileReader.pdf";
+//        String filename = "imm1295e.pdf";
         final DadosVistoTrabalho dadosVistoTrabalho = PDFReader.readFile(filename);
     }
 }
