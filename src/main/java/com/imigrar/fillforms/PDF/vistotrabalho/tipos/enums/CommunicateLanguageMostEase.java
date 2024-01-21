@@ -5,14 +5,11 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public enum Country {
-    EMPTY("", 0),
-    Brazil("b", 17),
-    Canada("c", 4),
-    Japan("j", 2),
-    UnitedStatesOfAmerica("u", 6)
+public enum CommunicateLanguageMostEase {
+    EMPTY(1),
+    English(2),
+    French(3),
     ;
 
-    private String firstLetter;
     private int position;
 }

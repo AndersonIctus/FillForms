@@ -5,12 +5,12 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public enum Country {
+public enum CountryIssue {
     EMPTY("", 0),
-    Brazil("b", 17),
-    Canada("c", 4),
-    Japan("j", 2),
-    UnitedStatesOfAmerica("u", 6)
+    USA_UNITED_STATES("u", 6),
+    BRA_BRAZIL("b", 14),
+    ISR_ISRAEL("i", 7),
+    TWN_TAIWAN("t", 13)
     ;
 
     private String firstLetter;

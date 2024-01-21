@@ -2,18 +2,16 @@ package com.imigrar.fillforms.PDF;
 
 import com.imigrar.fillforms.PDF.robotutil.RobotUtils;
 import com.imigrar.fillforms.PDF.vistotrabalho.DadosVistoTrabalho;
-import com.imigrar.fillforms.PDF.vistotrabalho.tipos.CountryGroup;
-import com.imigrar.fillforms.PDF.vistotrabalho.tipos.DateUtil;
-import com.imigrar.fillforms.PDF.vistotrabalho.tipos.FullName;
-import com.imigrar.fillforms.PDF.vistotrabalho.tipos.PreviousMaritalRelationship;
+import com.imigrar.fillforms.PDF.vistotrabalho.tipos.*;
+import com.imigrar.fillforms.PDF.vistotrabalho.tipos.enums.CountryIssue;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 
 public class RobotFillForm {
-    //    private static String NOME_FORMULARIO = "imm1295e.pdf";
-    private static String NOME_FORMULARIO = "testFileReader.pdf";
+    private static String NOME_FORMULARIO = "imm1295e.pdf";
+    //private static String NOME_FORMULARIO = "testFileReader.pdf";
 
     public static void fillForm(DadosVistoTrabalho dadosVisto) throws AWTException {
         JOptionPane.showMessageDialog(null, "Por favor clique no campo \"UCI\"");
@@ -35,7 +33,17 @@ public class RobotFillForm {
 
         // ************ Passport ************
         fillPassport(dadosVisto);
+
+        // ************ National Identity Document ************
+        fillNationalIdentityDocument(dadosVisto);
+
+        // ************ US PR CARD (USCIS) ************
+        fillUS_PR_CARD(dadosVisto);
+
+        // ************ US PR CARD (USCIS) ************
+        fillContactInformation(dadosVisto);
     }
+
 
     private static void fillPersonalDetails(DadosVistoTrabalho dadosVisto) {
         // 1 - Full Name
@@ -206,8 +214,173 @@ public class RobotFillForm {
         RobotUtils.sendKeys(dadosVisto.getLanguage().getFirstLetter(), dadosVisto.getLanguage().getPosition());
         RobotUtils.sendKeys(KeyEvent.VK_TAB);
 
+        // 1 - b - Able to comunicate
+        RobotUtils.sendKeys(KeyEvent.VK_DOWN, dadosVisto.getCommunicateLanguage().getPosition());
+        RobotUtils.sendKeys(KeyEvent.VK_TAB);
+
+        // 1 - c - In which language are you most ease
+        if(dadosVisto.getMostEaseCommunicateLanguage() != null){
+            RobotUtils.sendKeys(KeyEvent.VK_DOWN, dadosVisto.getMostEaseCommunicateLanguage().getPosition());
+        }
+        RobotUtils.sendKeys(KeyEvent.VK_TAB);
+
+        // 1 - d - have you taken a test for proeficiency in English or French?
+        if(dadosVisto.isHaveTakenTestToProeficiency()){
+            RobotUtils.sendKeys(KeyEvent.VK_RIGHT);
+        } else {
+            RobotUtils.sendKeys(KeyEvent.VK_LEFT);
+        }
+        RobotUtils.sendKeys(KeyEvent.VK_ENTER);
+        RobotUtils.sendKeys(KeyEvent.VK_TAB);
     }
 
     private static void fillPassport(DadosVistoTrabalho dadosVisto) {
+        // 1 - Passport Number
+        RobotUtils.sendKeys(dadosVisto.getPassportNumber());
+        RobotUtils.sendKeys(KeyEvent.VK_TAB);
+
+        // 2 - Country Territory
+        RobotUtils.sendKeys(dadosVisto.getCountryIssue().getFirstLetter(), dadosVisto.getCountryIssue().getPosition());
+        RobotUtils.sendKeys(KeyEvent.VK_TAB);
+
+        // 3 - Issue date
+        RobotUtils.sendKeys(dadosVisto.getIssueDate().print());
+        RobotUtils.sendKeys(KeyEvent.VK_TAB);
+
+        // 4 - Expiry date
+        RobotUtils.sendKeys(dadosVisto.getExpiryDate().print());
+        RobotUtils.sendKeys(KeyEvent.VK_TAB);
+
+        // 5 - Use a passport issued by Foreign Affairs in Taiwan?
+        if(dadosVisto.getCountryIssue() == CountryIssue.TWN_TAIWAN) {
+            if(dadosVisto.isPassportIssuedByTaiwanIncludePersonalIdentificator()) {
+                RobotUtils.sendKeys(KeyEvent.VK_RIGHT);
+            } else {
+                RobotUtils.sendKeys(KeyEvent.VK_LEFT);
+            }
+            RobotUtils.sendKeys(KeyEvent.VK_ENTER);
+        }
+        RobotUtils.sendKeys(KeyEvent.VK_TAB);
+
+        // 6 - Will you use a National Israeli passport?
+        if(dadosVisto.getCountryIssue() == CountryIssue.ISR_ISRAEL) {
+            if(dadosVisto.isPassportUseNationalIsraeliPassport()) {
+                RobotUtils.sendKeys(KeyEvent.VK_RIGHT);
+            } else {
+                RobotUtils.sendKeys(KeyEvent.VK_LEFT);
+            }
+            RobotUtils.sendKeys(KeyEvent.VK_ENTER);
+        }
+        RobotUtils.sendKeys(KeyEvent.VK_TAB);
+    }
+
+    private static void fillNationalIdentityDocument(DadosVistoTrabalho dadosVisto) {
+        final NationalIdentityDocument nationalIdentityDocument = dadosVisto.getNationalIdentityDocument();
+        if(nationalIdentityDocument != null) {
+            // 1 - Do you have National Identity Document?
+            RobotUtils.sendKeys(KeyEvent.VK_RIGHT);
+            RobotUtils.sendKeys(KeyEvent.VK_ENTER);
+            RobotUtils.sendKeys(KeyEvent.VK_TAB);
+
+            // 2 - Document Number
+            RobotUtils.sendKeys(nationalIdentityDocument.getDocumentNumber());
+            RobotUtils.sendKeys(KeyEvent.VK_TAB);
+
+            // 3 - Country Territory
+            RobotUtils.sendKeys(nationalIdentityDocument.getCountryIssue().getFirstLetter(), nationalIdentityDocument.getCountryIssue().getPosition());
+            RobotUtils.sendKeys(KeyEvent.VK_TAB);
+
+            // 4 - Issue date
+            RobotUtils.sendKeys(nationalIdentityDocument.getIssueDate().print());
+            RobotUtils.sendKeys(KeyEvent.VK_TAB);
+
+            // 5 - Expiry date
+            RobotUtils.sendKeys(nationalIdentityDocument.getExpiryDate().print());
+            RobotUtils.sendKeys(KeyEvent.VK_TAB);
+
+        } else {
+            RobotUtils.sendKeys(KeyEvent.VK_LEFT);
+            RobotUtils.sendKeys(KeyEvent.VK_ENTER);
+            RobotUtils.sendKeys(KeyEvent.VK_TAB, 5);
+        }
+
+    }
+
+    private static void fillUS_PR_CARD(DadosVistoTrabalho dadosVisto) {
+        if(dadosVisto.isAreYouLawfulPermanentResidentOfUS()) {
+            // 1 - Are you a lawful permanent resident of the United States?
+            RobotUtils.sendKeys(KeyEvent.VK_RIGHT);
+            RobotUtils.sendKeys(KeyEvent.VK_ENTER);
+            RobotUtils.sendKeys(KeyEvent.VK_TAB);
+
+            // 2 - US Citizenship and Immigration Services Number (USCIS)
+            RobotUtils.sendKeys(dadosVisto.getUscisNumber());
+            RobotUtils.sendKeys(KeyEvent.VK_TAB);
+
+            // 2 - USCIS expiry date
+            RobotUtils.sendKeys(dadosVisto.getUscisExpiryDate().print());
+            RobotUtils.sendKeys(KeyEvent.VK_TAB);
+
+        } else {
+            RobotUtils.sendKeys(KeyEvent.VK_LEFT);
+            RobotUtils.sendKeys(KeyEvent.VK_ENTER);
+            RobotUtils.sendKeys(KeyEvent.VK_TAB, 3);
+        }
+    }
+
+    private static void fillContactInformation(DadosVistoTrabalho dadosVisto) {
+        // 1 - Current Mailing Address
+        if( !("".equals(dadosVisto.getPoBox())) ) {
+            RobotUtils.sendKeys(dadosVisto.getPoBox());
+        }
+        RobotUtils.sendKeys(KeyEvent.VK_TAB);
+
+        fillMaillingAddres(dadosVisto.getCurrentMailingAddress());
+
+        // 2 - Residential Address
+        if(dadosVisto.getResidentialAddress() == null) {
+            RobotUtils.sendKeys(KeyEvent.VK_RIGHT);
+            RobotUtils.sendKeys(KeyEvent.VK_ENTER);
+            RobotUtils.sendKeys(KeyEvent.VK_TAB, 9);
+
+        } else {
+            RobotUtils.sendKeys(KeyEvent.VK_LEFT);
+            RobotUtils.sendKeys(KeyEvent.VK_ENTER);
+            RobotUtils.sendKeys(KeyEvent.VK_TAB);
+
+            fillMaillingAddres(dadosVisto.getResidentialAddress());
+        }
+    }
+
+    private static void fillMaillingAddres(MailingAddress mailingAddress) {
+        RobotUtils.sendKeys(mailingAddress.getAptUnit());
+        RobotUtils.sendKeys(KeyEvent.VK_TAB);
+
+        RobotUtils.sendKeys(mailingAddress.getStreetNo());
+        RobotUtils.sendKeys(KeyEvent.VK_TAB);
+
+        RobotUtils.sendKeys(mailingAddress.getStreetName());
+        RobotUtils.sendKeys(KeyEvent.VK_TAB);
+
+        RobotUtils.sendKeys(mailingAddress.getCityTown());
+        RobotUtils.sendKeys(KeyEvent.VK_TAB);
+
+        RobotUtils.sendKeys(mailingAddress.getCountry().getFirstLetter(), mailingAddress.getCountry().getPosition());
+        RobotUtils.sendKeys(KeyEvent.VK_TAB);
+
+        switch (mailingAddress.getCountry()){
+            case UnitedStatesOfAmerica :
+            case Canada:
+                RobotUtils.sendKeys(KeyEvent.VK_DOWN, mailingAddress.getProvinceState().getPosition());
+        }
+        RobotUtils.sendKeys(KeyEvent.VK_TAB);
+
+        RobotUtils.sendKeys(mailingAddress.getPostalCode());
+        RobotUtils.sendKeys(KeyEvent.VK_TAB);
+
+        if( !("".equals(mailingAddress.getDistrict())) ) {
+            RobotUtils.sendKeys(mailingAddress.getDistrict());
+        }
+        RobotUtils.sendKeys(KeyEvent.VK_TAB);
     }
 }

@@ -32,11 +32,28 @@ public class DadosVistoTrabalho {
     // LANGUAGES
     private Language language;
     private CommunicateLanguage communicateLanguage;
-    private CommunicateLanguage mostEaseCommunicateLanguage;
+    private CommunicateLanguageMostEase mostEaseCommunicateLanguage;
+    private boolean haveTakenTestToProeficiency = false;
 
     // PASSPORT
-    private String passportNUmber;
-    private Country countryIssue;
+    private String passportNumber;
+    private CountryIssue countryIssue;
     private DateUtil issueDate;
     private DateUtil expiryDate;
+    private boolean passportIssuedByTaiwanIncludePersonalIdentificator = false;
+    private boolean passportUseNationalIsraeliPassport = false;
+
+    // National Identity Document
+    private NationalIdentityDocument nationalIdentityDocument;
+
+    // US PR CARD (USCIS)
+    private boolean areYouLawfulPermanentResidentOfUS = false;
+    private String uscisNumber;
+    private DateUtil uscisExpiryDate;
+
+    // Contact Information
+    private String poBox;
+    private MailingAddress currentMailingAddress;
+    private MailingAddress residentialAddress;
+
 }
