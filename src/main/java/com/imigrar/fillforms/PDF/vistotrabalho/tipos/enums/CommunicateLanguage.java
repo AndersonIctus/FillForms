@@ -1,4 +1,4 @@
-package com.imigrar.fillforms.PDF.vistotrabalho.tipos;
+package com.imigrar.fillforms.PDF.vistotrabalho.tipos.enums;
 
 public enum CommunicateLanguage {
     English,

@@ -14,4 +14,8 @@ public class DateUtil {
         this.month = data.substring(3, 5);
         this.year = data.substring(6);
     }
+
+    public String print() {
+        return String.format("%s%s%s", year, month, day);
+    }
 }
