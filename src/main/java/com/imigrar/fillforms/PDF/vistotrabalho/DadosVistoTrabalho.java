@@ -55,5 +55,19 @@ public class DadosVistoTrabalho {
     private String poBox;
     private MailingAddress currentMailingAddress;
     private MailingAddress residentialAddress;
+    private PhoneDetail telephoneNumber;
+    private PhoneDetail telephoneAlternateNumber;
+    private FaxDetail faxNumber;
+    private String email;
 
+    // Details os Intended Work in Canada
+    private WorkPermitType workPermitType;
+    private String employerName;
+    private String employerAddress;
+    private IntendedLocationEmployment intendedLocationEmployment;
+    private String jobTitle;
+    private String jobBriefDescriptionOfDuties;
+    private DateUtil intendedWorkDurationFrom;
+    private DateUtil intendedWorkDurationTo;
+    private String lmiaOrLmiaExemptNumber;
 }

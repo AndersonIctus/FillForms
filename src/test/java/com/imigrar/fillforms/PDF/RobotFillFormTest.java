@@ -5,7 +5,7 @@ import com.imigrar.fillforms.PDF.vistotrabalho.tipos.*;
 import com.imigrar.fillforms.PDF.vistotrabalho.tipos.enums.*;
 import org.junit.jupiter.api.Test;
 
-import java.awt.AWTException;
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -52,6 +52,10 @@ public class RobotFillFormTest {
 
         //////////////////////// Contact Info
         includeContactInfo(dados);
+
+
+        //////////////////////// Detais of Intended work in Canada
+        includeDetailsOfWork(dados);
 
 
         return dados;
@@ -119,5 +123,46 @@ public class RobotFillFormTest {
 //                        "Ceara"
 //                )
 //        );
+
+        dados.setTelephoneNumber(
+                new PhoneDetail(
+                        PhoneType.Cellular, "55","988771234", "88"
+                )
+        );
+
+//        dados.setTelephoneAlternateNumber(
+//                new PhoneDetail(
+//                        PhoneType.Residence, "55","4568761234", "88"
+//                )
+//        );
+
+//        dados.setFaxNumber(
+//                new FaxDetail(
+//                        "3378091234", "767"
+//                )
+//        );
+
+        dados.setEmail("email.test@mail.com");
+    }
+
+    private void includeDetailsOfWork(DadosVistoTrabalho dados) {
+        dados.setWorkPermitType(WorkPermitType.OpenWorkPermit);
+        dados.setEmployerName("Empregador Teste");
+        dados.setEmployerAddress("Endereço do empregador");
+
+        dados.setIntendedLocationEmployment(
+                new IntendedLocationEmployment(
+                        CanadaProvince.QC,
+                        CanadaCityTown.QC_Abitibi,
+                        "Address Teste Quebec"
+                )
+        );
+
+        dados.setJobTitle("Titulo Teste");
+        dados.setJobBriefDescriptionOfDuties("Fazia um teste nessa ocupação");
+        dados.setIntendedWorkDurationFrom(new DateUtil("15/02/2024"));
+        dados.setIntendedWorkDurationTo(new DateUtil("15/02/2025"));
+
+        // dados.setLmiaOrLmiaExemptNumber("8918234");
     }
 }

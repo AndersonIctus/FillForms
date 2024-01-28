@@ -5,7 +5,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
-final class Char2KeyCode {
+public final class Char2KeyCode {
     /**
      * Map with matching character and array of key codes
      */
@@ -104,7 +104,7 @@ final class Char2KeyCode {
 
         initMap.put('~', new int[] { KeyEvent.VK_SHIFT, KeyEvent.VK_BACK_QUOTE });
         initMap.put('!', new int[] { KeyEvent.VK_EXCLAMATION_MARK });
-        initMap.put('@', new int[] { KeyEvent.VK_AT });
+        initMap.put('@', new int[] { KeyEvent.VK_SHIFT, KeyEvent.VK_2 });
         initMap.put('#', new int[] { KeyEvent.VK_NUMBER_SIGN });
         initMap.put('$', new int[] { KeyEvent.VK_DOLLAR });
         initMap.put('%', new int[] { KeyEvent.VK_SHIFT, KeyEvent.VK_5 });

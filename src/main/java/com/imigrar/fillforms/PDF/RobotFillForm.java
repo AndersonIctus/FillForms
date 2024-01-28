@@ -3,6 +3,8 @@ package com.imigrar.fillforms.PDF;
 import com.imigrar.fillforms.PDF.robotutil.RobotUtils;
 import com.imigrar.fillforms.PDF.vistotrabalho.DadosVistoTrabalho;
 import com.imigrar.fillforms.PDF.vistotrabalho.tipos.*;
+import com.imigrar.fillforms.PDF.vistotrabalho.tipos.enums.CanadaCityTown;
+import com.imigrar.fillforms.PDF.vistotrabalho.tipos.enums.CanadaProvince;
 import com.imigrar.fillforms.PDF.vistotrabalho.tipos.enums.CountryIssue;
 
 import javax.swing.*;
@@ -26,26 +28,29 @@ public class RobotFillForm {
         RobotUtils.sendKeys(KeyEvent.VK_TAB);
 
         // ************ Personal Details ************
-        fillPersonalDetails(dadosVisto);
+        fillFormPersonalDetails(dadosVisto);
 
         // ************ Languages ************
-        fillLanguages(dadosVisto);
+        fillFormLanguages(dadosVisto);
 
         // ************ Passport ************
-        fillPassport(dadosVisto);
+        fillFormPassport(dadosVisto);
 
         // ************ National Identity Document ************
-        fillNationalIdentityDocument(dadosVisto);
+        fillFormNationalIdentityDocument(dadosVisto);
 
         // ************ US PR CARD (USCIS) ************
-        fillUS_PR_CARD(dadosVisto);
+        fillFormUS_PR_CARD(dadosVisto);
 
-        // ************ US PR CARD (USCIS) ************
-        fillContactInformation(dadosVisto);
+        // ************ Contact Information ************
+        fillFormContactInformation(dadosVisto);
+
+        // ************ Details of Intended Work in Canada ************
+        fillFormDetailsOfIntendedWorkInCanada(dadosVisto);
     }
 
 
-    private static void fillPersonalDetails(DadosVistoTrabalho dadosVisto) {
+    private static void fillFormPersonalDetails(DadosVistoTrabalho dadosVisto) {
         // 1 - Full Name
         RobotUtils.sendKeys(dadosVisto.getFullname().getFamilyName());
         RobotUtils.sendKeys(KeyEvent.VK_TAB);
@@ -188,28 +193,7 @@ public class RobotFillForm {
         }
     }
 
-    private static void fillCountryGroup(CountryGroup countryGroup) {
-        RobotUtils.sendKeys(countryGroup.getCountryResidence().getFirstLetter(), countryGroup.getCountryResidence().getPosition());
-        RobotUtils.sendKeys(KeyEvent.VK_TAB);
-        RobotUtils.sendKeys(KeyEvent.VK_DOWN, countryGroup.getStatus().getPosition());
-        RobotUtils.sendKeys(KeyEvent.VK_TAB);
-        if( !("".equals(countryGroup.getStatusOther())) ) {
-            RobotUtils.sendKeys(countryGroup.getStatusOther());
-        }
-        RobotUtils.sendKeys(KeyEvent.VK_TAB);
-
-        if(countryGroup.getFrom() != null) {
-            RobotUtils.sendKeys(countryGroup.getFrom().print());
-        }
-        RobotUtils.sendKeys(KeyEvent.VK_TAB);
-
-        if(countryGroup.getTo() != null) {
-            RobotUtils.sendKeys(countryGroup.getTo().print());
-        }
-        RobotUtils.sendKeys(KeyEvent.VK_TAB);
-    }
-
-    private static void fillLanguages(DadosVistoTrabalho dadosVisto) {
+    private static void fillFormLanguages(DadosVistoTrabalho dadosVisto) {
         // 1 - a - native language
         RobotUtils.sendKeys(dadosVisto.getLanguage().getFirstLetter(), dadosVisto.getLanguage().getPosition());
         RobotUtils.sendKeys(KeyEvent.VK_TAB);
@@ -234,7 +218,7 @@ public class RobotFillForm {
         RobotUtils.sendKeys(KeyEvent.VK_TAB);
     }
 
-    private static void fillPassport(DadosVistoTrabalho dadosVisto) {
+    private static void fillFormPassport(DadosVistoTrabalho dadosVisto) {
         // 1 - Passport Number
         RobotUtils.sendKeys(dadosVisto.getPassportNumber());
         RobotUtils.sendKeys(KeyEvent.VK_TAB);
@@ -274,7 +258,7 @@ public class RobotFillForm {
         RobotUtils.sendKeys(KeyEvent.VK_TAB);
     }
 
-    private static void fillNationalIdentityDocument(DadosVistoTrabalho dadosVisto) {
+    private static void fillFormNationalIdentityDocument(DadosVistoTrabalho dadosVisto) {
         final NationalIdentityDocument nationalIdentityDocument = dadosVisto.getNationalIdentityDocument();
         if(nationalIdentityDocument != null) {
             // 1 - Do you have National Identity Document?
@@ -306,7 +290,7 @@ public class RobotFillForm {
 
     }
 
-    private static void fillUS_PR_CARD(DadosVistoTrabalho dadosVisto) {
+    private static void fillFormUS_PR_CARD(DadosVistoTrabalho dadosVisto) {
         if(dadosVisto.isAreYouLawfulPermanentResidentOfUS()) {
             // 1 - Are you a lawful permanent resident of the United States?
             RobotUtils.sendKeys(KeyEvent.VK_RIGHT);
@@ -328,7 +312,7 @@ public class RobotFillForm {
         }
     }
 
-    private static void fillContactInformation(DadosVistoTrabalho dadosVisto) {
+    private static void fillFormContactInformation(DadosVistoTrabalho dadosVisto) {
         // 1 - Current Mailing Address
         if( !("".equals(dadosVisto.getPoBox())) ) {
             RobotUtils.sendKeys(dadosVisto.getPoBox());
@@ -350,6 +334,116 @@ public class RobotFillForm {
 
             fillMaillingAddres(dadosVisto.getResidentialAddress());
         }
+
+        // 3 - Telephone no.
+        if(dadosVisto.getTelephoneNumber() != null) {
+            fillTelephoneNumber(dadosVisto.getTelephoneNumber());
+        } else {
+            RobotUtils.sendKeys(KeyEvent.VK_TAB, 5);
+        }
+        RobotUtils.sendKeys(KeyEvent.VK_TAB);
+
+        // 4 - Alternate Telephone no.
+        if(dadosVisto.getTelephoneAlternateNumber() != null) {
+            fillTelephoneNumber(dadosVisto.getTelephoneAlternateNumber());
+        } else {
+            RobotUtils.sendKeys(KeyEvent.VK_TAB, 5);
+        }
+        RobotUtils.sendKeys(KeyEvent.VK_TAB);
+
+        // 5 - Fax no.
+        if(dadosVisto.getFaxNumber() != null) {
+            fillFaxNumber(dadosVisto.getFaxNumber());
+        } else {
+            RobotUtils.sendKeys(KeyEvent.VK_TAB, 4);
+        }
+        RobotUtils.sendKeys(KeyEvent.VK_TAB);
+
+        // 6 - Email Address
+        if(!StringUtil.isEmptyOrNull(dadosVisto.getEmail())) {
+            RobotUtils.sendKeys(dadosVisto.getEmail());
+        }
+        RobotUtils.sendKeys(KeyEvent.VK_TAB);
+    }
+
+    private static void fillFormDetailsOfIntendedWorkInCanada(DadosVistoTrabalho dadosVisto) {
+        RobotUtils.sendKeys(KeyEvent.VK_DOWN, dadosVisto.getWorkPermitType().getPosition());
+        RobotUtils.sendKeys(KeyEvent.VK_TAB);
+
+        if(!StringUtil.isEmptyOrNull(dadosVisto.getEmployerName())) {
+            RobotUtils.sendKeys(dadosVisto.getEmployerName());
+        }
+        RobotUtils.sendKeys(KeyEvent.VK_TAB);
+
+        if(!StringUtil.isEmptyOrNull(dadosVisto.getEmployerAddress())) {
+            RobotUtils.sendKeys(dadosVisto.getEmployerAddress());
+        }
+        RobotUtils.sendKeys(KeyEvent.VK_TAB);
+
+        final IntendedLocationEmployment intendedLocationEmployment = dadosVisto.getIntendedLocationEmployment();
+        if(intendedLocationEmployment != null) {
+            final CanadaProvince province = intendedLocationEmployment.getProvince();
+            RobotUtils.sendKeys(KeyEvent.VK_DOWN, province.getPosition() );
+            RobotUtils.sendKeys(KeyEvent.VK_TAB);
+
+            final CanadaCityTown cityTown = intendedLocationEmployment.getCityTown();
+            RobotUtils.sendKeys(cityTown.getFirstLetter(), cityTown.getPosition() );
+            RobotUtils.sendKeys(KeyEvent.VK_TAB);
+
+            RobotUtils.sendKeys(intendedLocationEmployment.getAddress());
+            RobotUtils.sendKeys(KeyEvent.VK_TAB);
+
+        } else {
+            RobotUtils.sendKeys(KeyEvent.VK_TAB, 3);
+        }
+
+        if(!StringUtil.isEmptyOrNull(dadosVisto.getJobTitle())) {
+            RobotUtils.sendKeys(dadosVisto.getJobTitle());
+        }
+        RobotUtils.sendKeys(KeyEvent.VK_TAB);
+
+
+        if(!StringUtil.isEmptyOrNull(dadosVisto.getJobBriefDescriptionOfDuties())) {
+            RobotUtils.sendKeys(dadosVisto.getJobBriefDescriptionOfDuties());
+        }
+        RobotUtils.sendKeys(KeyEvent.VK_TAB);
+
+        if(dadosVisto.getIntendedWorkDurationFrom() != null) {
+            RobotUtils.sendKeys(dadosVisto.getIntendedWorkDurationFrom().print());
+        }
+        RobotUtils.sendKeys(KeyEvent.VK_TAB);
+
+        if(dadosVisto.getIntendedWorkDurationTo() != null) {
+            RobotUtils.sendKeys(dadosVisto.getIntendedWorkDurationTo().print());
+        }
+        RobotUtils.sendKeys(KeyEvent.VK_TAB);
+
+        if(!StringUtil.isEmptyOrNull(dadosVisto.getLmiaOrLmiaExemptNumber())) {
+            RobotUtils.sendKeys(dadosVisto.getLmiaOrLmiaExemptNumber());
+        }
+        RobotUtils.sendKeys(KeyEvent.VK_TAB);
+    }
+
+    //////////////////////////////////////////////////////////////////////////////////////
+    private static void fillCountryGroup(CountryGroup countryGroup) {
+        RobotUtils.sendKeys(countryGroup.getCountryResidence().getFirstLetter(), countryGroup.getCountryResidence().getPosition());
+        RobotUtils.sendKeys(KeyEvent.VK_TAB);
+        RobotUtils.sendKeys(KeyEvent.VK_DOWN, countryGroup.getStatus().getPosition());
+        RobotUtils.sendKeys(KeyEvent.VK_TAB);
+        if( !("".equals(countryGroup.getStatusOther())) ) {
+            RobotUtils.sendKeys(countryGroup.getStatusOther());
+        }
+        RobotUtils.sendKeys(KeyEvent.VK_TAB);
+
+        if(countryGroup.getFrom() != null) {
+            RobotUtils.sendKeys(countryGroup.getFrom().print());
+        }
+        RobotUtils.sendKeys(KeyEvent.VK_TAB);
+
+        if(countryGroup.getTo() != null) {
+            RobotUtils.sendKeys(countryGroup.getTo().print());
+        }
+        RobotUtils.sendKeys(KeyEvent.VK_TAB);
     }
 
     private static void fillMaillingAddres(MailingAddress mailingAddress) {
@@ -382,5 +476,85 @@ public class RobotFillForm {
             RobotUtils.sendKeys(mailingAddress.getDistrict());
         }
         RobotUtils.sendKeys(KeyEvent.VK_TAB);
+    }
+
+    private static void fillTelephoneNumber(PhoneDetail telephoneNumber) {
+        if(telephoneNumber.isCanadaUsCode()) {
+            RobotUtils.sendKeys(KeyEvent.VK_ENTER);
+            RobotUtils.sendKeys(KeyEvent.VK_TAB, 2);
+        } else {
+            RobotUtils.sendKeys(KeyEvent.VK_TAB);
+            RobotUtils.sendKeys(KeyEvent.VK_ENTER);
+            RobotUtils.sendKeys(KeyEvent.VK_TAB);
+        }
+
+        // Type
+        RobotUtils.sendKeys(KeyEvent.VK_DOWN, telephoneNumber.getType().getPosition());
+        RobotUtils.sendKeys(KeyEvent.VK_TAB);
+
+        // Country Code And Number
+        if(telephoneNumber.isCanadaUsCode()) {
+            RobotUtils.sendKeys(KeyEvent.VK_TAB);
+            fillCanadaUsPhoneNumber(telephoneNumber.getNumberExt(), telephoneNumber.getNumber());
+
+        } else {
+            RobotUtils.sendKeys(telephoneNumber.getCountryCode());
+            RobotUtils.sendKeys(KeyEvent.VK_TAB);
+
+            fillComumPhoneNumber(telephoneNumber.getNumberExt(), telephoneNumber.getNumber());
+        }
+    }
+
+    private static void fillFaxNumber(FaxDetail faxNumber) {
+        if(faxNumber.isCanadaUsCode()) {
+            RobotUtils.sendKeys(KeyEvent.VK_ENTER);
+            RobotUtils.sendKeys(KeyEvent.VK_TAB, 2);
+        } else {
+            RobotUtils.sendKeys(KeyEvent.VK_TAB);
+            RobotUtils.sendKeys(KeyEvent.VK_ENTER);
+            RobotUtils.sendKeys(KeyEvent.VK_TAB);
+        }
+
+        // Country Code And Number
+        if(faxNumber.isCanadaUsCode()) {
+            RobotUtils.sendKeys(KeyEvent.VK_TAB);
+            fillCanadaUsPhoneNumber(faxNumber.getNumberExt(), faxNumber.getNumber());
+
+        } else {
+            RobotUtils.sendKeys(faxNumber.getCountryCode());
+            RobotUtils.sendKeys(KeyEvent.VK_TAB);
+
+            fillComumPhoneNumber(faxNumber.getNumberExt(), faxNumber.getNumber());
+        }
+    }
+
+    private static void fillComumPhoneNumber(String numberExt, String number) {
+        // Number
+        RobotUtils.sendKeys(number);
+        RobotUtils.sendKeys(KeyEvent.VK_TAB);
+
+        // Ext
+        if(!StringUtil.isEmptyOrNull(numberExt)) {
+            RobotUtils.sendKeys(numberExt);
+        }
+    }
+
+    private static void fillCanadaUsPhoneNumber(String numberExt, String number) {
+        // EXT
+        if(!StringUtil.isEmptyOrNull(numberExt)) {
+            RobotUtils.sendKeys(numberExt);
+        }
+        RobotUtils.sendKeys(KeyEvent.VK_TAB);
+
+        // Number
+        RobotUtils.sendKeys(number);
+
+        // skips ....
+        RobotUtils.sendKeys(KeyEvent.VK_TAB, 3);
+    }
+
+    //////////////////////////////////////////////////////////////////////////////////////
+    private static void LOG(String logLine) {
+        System.out.println(logLine);
     }
 }
